@@ -64,3 +64,17 @@ local delim = is_windows and ";" or ":"
 vim.env.PATH = table.concat({ vim.fn.stdpath "data", "mason", "bin" }, sep) .. delim .. vim.env.PATH
 -- local o = vim.o
 -- o.cursorlineopt ='both' -- to enable cursorline!
+
+-- DapBreakpoint Ui Icon
+vim.fn.sign_define("DapBreakpoint", {
+  text = "🔴", -- nerdfonts icon here
+  texthl = "DapBreakpointSymbol",
+  linehl = "DapBreakpoint",
+  numhl = "DapBreakpoint",
+})
+vim.fn.sign_define("DapStopped", {
+  text = "🔴", -- nerdfonts icon here
+  texthl = "DapStoppedSymbol",
+  linehl = "DapBreakpoint",
+  numhl = "DapBreakpoint",
+})
