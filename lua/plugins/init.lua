@@ -1,25 +1,8 @@
 return {
   {
-    "nvim-java/nvim-java",
-    -- config = false,
-    dependencies = {
-      {
-        "neovim/nvim-lspconfig",
-        --     opts = {
-        --       servers = {
-        --         jdtls = {
-        --           -- Your custom jdtls settings goes here
-        --         },
-        --       },
-        setup = {
-          jdtls = function()
-            require("java").setup {
-              -- Your custom nvim-java configuration goes here
-            }
-          end,
-        },
-      },
-    },
+    "mfussenegger/nvim-jdtls",
+    dependencies = { "folke/which-key.nvim" },
+    ft = "java",
   },
   {
     "stevearc/conform.nvim",
@@ -54,9 +37,41 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    event = "VeryLazy",
+    dependencies = {
+      -- LSP Management
+      -- https://github.com/williamboman/mason.nvim
+      { "williamboman/mason.nvim" },
+      -- https://github.com/williamboman/mason-lspconfig.nvim
+      { "williamboman/mason-lspconfig.nvim" },
+
+      -- Auto-Install LSPs, linters, formatters, debuggers
+      -- https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim
+      { "WhoIsSethDaniel/mason-tool-installer.nvim" },
+
+      -- Useful status updates for LSP
+      -- https://github.com/j-hui/fidget.nvim
+      { "j-hui/fidget.nvim", opts = {} },
+    },
     config = function()
-      require "configs.lspconfig"
-      --require "plugins.configs.lspconfig"
+      require "nvchad.configs.lspconfig"
+      require("mason").setup()
+      require("mason-lspconfig").setup {
+        -- Install these LSPs automatically
+        ensure_installed = {
+          "gradle_ls",
+          -- "groovyls",
+          "jdtls",
+        },
+      }
+
+      require("mason-tool-installer").setup {
+        -- Install these linters, formatters, debuggers automatically
+        ensure_installed = {
+          "java-debug-adapter",
+          "java-test",
+        },
+      }
     end,
   },
   {
