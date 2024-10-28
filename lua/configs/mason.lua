@@ -14,6 +14,8 @@ local options = {
     "htmx-lsp",
     "biome",
     "zls",
+    "java-debug-adapter",
+    "java-test",
     --"mypy",
     --gopls,
   },
