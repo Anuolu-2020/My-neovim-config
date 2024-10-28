@@ -5,9 +5,11 @@ local options = {
     html = { "prettierd" },
     javascript = { "biome" },
     typescript = { "biome" },
-    go = { "golines", "gofumpt", "goimports_reviser" },
+    --go = { "golines", "gofumpt" },
     python = { "black" },
     clang = { "clang_format" },
+    json = { "biome" },
+    yaml = { "yamlfmt" },
   },
 
   format_on_save = {
