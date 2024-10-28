@@ -9,6 +9,7 @@ M.base46 = {
 
   hl_override = {
     Comment = { italic = true, fg = "#999999" },
+    LineNr = { fg = "baby_pink" },
     ["@comment"] = { italic = true, link = "Comment" },
   },
 }
