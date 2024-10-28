@@ -173,6 +173,12 @@ map("n", "gR", function()
   require("trouble").toggle "lsp_references"
 end)
 
+map("n", "<leader>tc", function()
+  if vim.bo.filetype == "java" then
+    require("jdtls").test_class()
+  end
+end, { desc = "Run Java test class" })
+
 return M
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
