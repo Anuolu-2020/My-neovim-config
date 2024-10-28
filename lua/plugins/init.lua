@@ -1,5 +1,27 @@
 return {
   {
+    "nvim-java/nvim-java",
+    -- config = false,
+    dependencies = {
+      {
+        "neovim/nvim-lspconfig",
+        --     opts = {
+        --       servers = {
+        --         jdtls = {
+        --           -- Your custom jdtls settings goes here
+        --         },
+        --       },
+        setup = {
+          jdtls = function()
+            require("java").setup {
+              -- Your custom nvim-java configuration goes here
+            }
+          end,
+        },
+      },
+    },
+  },
+  {
     "stevearc/conform.nvim",
     event = "BufWritePre", -- uncomment for format on save
     opts = require "configs.conform",
@@ -121,6 +143,7 @@ return {
         "typescript",
         "go",
         "javascript",
+        "java",
       }
     end,
   },
@@ -174,5 +197,11 @@ return {
       -- or leave it empty to use the default settings
       -- refer to the configuration section below
     },
+  },
+  {
+    "barrett-ruth/live-server.nvim",
+    build = "pnpm add -g live-server",
+    cmd = { "LiveServerStart", "LiveServerStop" },
+    config = true,
   },
 }
