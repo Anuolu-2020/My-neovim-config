@@ -5,11 +5,15 @@ local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 local nvlsp = require "nvchad.configs.lspconfig"
 
+--Auto save group
+local group = vim.api.nvim_create_augroup("autosave", {})
+
 local M = {}
 local map = vim.keymap.set
 
 -- EXAMPLE
-local servers = { "cssls", "tsserver", "gopls", "pyright", "ruff_lsp", "htmx", "tailwindcss", "zls", "biome" }
+local servers =
+  { "cssls", "ts_ls", "gopls", "pyright", "ruff_lsp", "htmx", "tailwindcss", "zls", "biome", "yamlls", "jdtls" }
 
 --"eslint",
 
@@ -113,7 +117,7 @@ for _, lsp in ipairs(servers) do
   }
 end
 
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   filetypes = { "ts", "js", "html" },
   commands = {
     OrganizeImports = {
@@ -121,6 +125,23 @@ lspconfig.tsserver.setup {
       description = "Organize Imports",
     },
   },
+  -- on_attach = function()
+  --   vim.api.nvim_create_autocmd("User", {
+  --     group = group,
+  --     --vim.api.nvim_create_augroup("ts_imports", { clear = true }),
+  --     pattern = "AutoSaveWritePost",
+  --     callback = function()
+  --       vim.lsp.buf.code_action {
+  --         apply = true,
+  --         context = {
+  --           commands = organize_imports,
+  --           -- only = { "typescript.organizeImports" },
+  --           diagnostics = {},
+  --         },
+  --       }
+  --     end,
+  --   })
+  -- end,
 }
 
 lspconfig.gopls.setup {
@@ -137,6 +158,27 @@ lspconfig.gopls.setup {
       staticcheck = true,
     },
   },
+  on_attach = function()
+    -- Trigger the organize imports action after the auto-save plugin saves the file
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "AutoSaveWritePost", -- Hook into the auto-save event
+      --buffer = bufnr,
+      group = group,
+      callback = function()
+        vim.lsp.buf.code_action {
+          context = {
+            only = { "source.organizeImports" },
+            diagnostics = {},
+          },
+          apply = true,
+        }
+      end,
+    })
+  end,
+}
+
+lspconfig.yamlls.setup {
+  filetypes = { "yaml", "yml" },
 }
 
 lspconfig.pyright.setup {
@@ -186,8 +228,26 @@ lspconfig.clangd.setup {
   capabilities = nvlsp.capabilities,
 }
 
+lspconfig.jdtls.setup {
+  settings = {
+    java = {
+      configuration = {
+        runtimes = {
+          {
+            name = "JavaSE-21",
+            path = "/usr/lib/jvm/jdk-21.0.5-oracle-x64",
+            default = true,
+          },
+        },
+      },
+    },
+  },
+
+  filetypes = { "java" },
+}
+
 -- configuring single server, example: typescript
--- lspconfig.tsserver.setup {
+-- lspconfig.ts_ls.setup {
 --   on_attach = nvlsp.on_attach,
 --   on_init = nvlsp.on_init,
 --   capabilities = nvlsp.capabilities,
