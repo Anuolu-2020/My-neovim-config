@@ -3,7 +3,7 @@ require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
-local nvlsp = require "nvchad.configs.lspconfig"
+--local nvlsp = require "nvchad.configs.lspconfig"
 
 --Auto save group
 local group = vim.api.nvim_create_augroup("autosave", {})
@@ -26,7 +26,7 @@ M.on_attah = function(_, bufnr)
   map("n", "gh", vim.lsp.buf.declaration, opts "Go to declaration")
   map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
   map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
-  map("n", "sh", vim.lsp.buf.hover, opts "Show hover information")
+  map("n", "K", vim.lsp.buf.hover, opts "Show hover information")
   map("n", "<leader>lh", vim.lsp.buf.signature_help, opts "Show signature help")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
   map("n", "<leader>wr", vim.lsp.buf.remove_workspace_folder, opts "Remove workspace folder")
@@ -41,7 +41,7 @@ M.on_attah = function(_, bufnr)
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "List workspace folders")
 
-  map("n", "<leader>D", vim.lsp.buf.type_definition, opts "Go to type definition")
+  map("n", "<leader>gd", vim.lsp.buf.type_definition, opts "Go to type definition")
 
   map("n", "<leader>ra", function()
     require "nvchad.lsp.renamer"()
@@ -80,11 +80,11 @@ M.capabilities.textDocument.completion.completionItem = {
 
 vim.api.nvim_command "MasonToolsInstall"
 
-local open_floating_preview = vim.lsp.util.open_floating_preview
-function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+local open_floating_preview = util.open_floating_preview
+function util.open_floating_preview(contents, syntax, opts, ...)
   opts = opts or {}
   opts.border = opts.border or "rounded" -- Set border to rounded
-  return open_floating_preview(contents, syntax, opts, ...)
+  return open_floating_preview(contents, syntax, opts)
 end
 
 M.defaults = function()
@@ -128,9 +128,9 @@ end
 for _, lsp in ipairs(servers) do
   if lsp ~= "jdtls" then
     lspconfig[lsp].setup {
-      on_attach = nvlsp.on_attach,
-      on_init = nvlsp.on_init,
-      capabilities = nvlsp.capabilities,
+      on_attach = M.on_attach,
+      on_init = M.on_init,
+      capabilities = M.capabilities,
     }
   end
 end
@@ -143,23 +143,6 @@ lspconfig.ts_ls.setup {
       description = "Organize Imports",
     },
   },
-  -- on_attach = function()
-  --   vim.api.nvim_create_autocmd("User", {
-  --     group = group,
-  --     --vim.api.nvim_create_augroup("ts_imports", { clear = true }),
-  --     pattern = "AutoSaveWritePost",
-  --     callback = function()
-  --       vim.lsp.buf.code_action {
-  --         apply = true,
-  --         context = {
-  --           commands = organize_imports,
-  --           -- only = { "typescript.organizeImports" },
-  --           diagnostics = {},
-  --         },
-  --       }
-  --     end,
-  --   })
-  -- end,
 }
 
 lspconfig.gopls.setup {
@@ -241,9 +224,9 @@ lspconfig.biome.setup {
 lspconfig.clangd.setup {
   on_attach = function(client, bufnr)
     client.server_capabilities.signatureHelpProvider = false
-    nvlsp.on_attach(client, bufnr)
+    M.on_attach(client, bufnr)
   end,
-  capabilities = nvlsp.capabilities,
+  capabilities = M.capabilities,
 }
 
 lspconfig.jdtls.setup {
