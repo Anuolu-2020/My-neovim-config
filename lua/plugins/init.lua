@@ -54,13 +54,12 @@ return {
       { "j-hui/fidget.nvim", opts = {} },
     },
     config = function()
-      require "nvchad.configs.lspconfig"
+      require "configs.lspconfig"
       require("mason").setup()
       require("mason-lspconfig").setup {
         -- Install these LSPs automatically
         ensure_installed = {
           "gradle_ls",
-          -- "groovyls",
           "jdtls",
         },
       }
@@ -119,7 +118,7 @@ return {
     "williamboman/mason.nvim",
     cmd = { "Mason", "MasonInstall", "MasonInstallAll", "MasonUpdate" },
     opts = function()
-      return require "nvchad.configs.mason"
+      return require "configs.mason"
     end,
   },
   {
@@ -139,7 +138,7 @@ return {
     ft = {
       "javascript",
       "javascriptreact",
-      "typescript",
+      --"typescript",
       "typescriptreact",
       "html",
     },
@@ -162,7 +161,7 @@ return {
       }
     end,
   },
-  {
+  --[[{
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
@@ -178,7 +177,7 @@ return {
         },
       }
     end,
-  },
+  },--]]
   {
     "okuuva/auto-save.nvim",
     cmd = "ASToggle", -- optional for lazy loading on command
@@ -218,5 +217,12 @@ return {
     build = "pnpm add -g live-server",
     cmd = { "LiveServerStart", "LiveServerStop" },
     config = true,
+  },
+  {
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    config = true,
+    -- use opts = {} for passing setup options
+    -- this is equivalent to setup({}) function
   },
 }
