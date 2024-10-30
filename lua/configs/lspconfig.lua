@@ -24,8 +24,9 @@ M.on_attah = function(_, bufnr)
   end
 
   map("n", "gh", vim.lsp.buf.declaration, opts "Go to declaration")
-  map("n", "gd", vim.lsp.buf.definition, opts "Go to definition")
-  map("n", "gi", vim.lsp.buf.implementation, opts "Go to implementation")
+  map("n", "gd", require("telescope.builtin").lsp_definitions, opts "Go to definition")
+  map("n", "gI", require("telescope.builtin").lsp_implementations, opts "Go to implementation")
+  map("n", "gr", require("telescope.builtin").lsp_references, opts "Go to references")
   map("n", "K", vim.lsp.buf.hover, opts "Show hover information")
   map("n", "<leader>lh", vim.lsp.buf.signature_help, opts "Show signature help")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
@@ -34,14 +35,15 @@ M.on_attah = function(_, bufnr)
   --map("n", "gh", vim.lsp.buf.hover, opts "hover information")
 
   -- New mappings for linting errors
-  map("n", "gn", vim.diagnostic.goto_next, opts "Go to next diagnostic")
-  map("n", "gp", vim.diagnostic.goto_prev, opts "Go to previous diagnostic")
+  map("n", "[d", vim.diagnostic.goto_next, opts "Go to next diagnostic")
+  map("n", "]d", vim.diagnostic.goto_prev, opts "Go to previous diagnostic")
+  map("n", "<leader>e", vim.diagnostic.open_float, opts "Show diagnostic error message")
 
   map("n", "<leader>wl", function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, opts "List workspace folders")
 
-  map("n", "<leader>gd", vim.lsp.buf.type_definition, opts "Go to type definition")
+  map("n", "<leader>gt", vim.lsp.buf.type_definition, opts "Go to type definition")
 
   map("n", "<leader>ra", function()
     require "nvchad.lsp.renamer"()
@@ -124,6 +126,15 @@ local function organize_imports()
   vim.lsp.buf.execute_command(params)
 end
 
+local function go_to_source_definition()
+  local params = vim.lsp.util.make_position_params()
+  params.command = "typescript.goToSourceDefinition"
+  params.arguments = { params.textDocument.uri, params.position }
+  params.open = true
+
+  vim.lsp.buf.execute_command(params)
+end
+
 -- lsps with default config
 for _, lsp in ipairs(servers) do
   if lsp ~= "jdtls" then
@@ -143,6 +154,14 @@ lspconfig.ts_ls.setup {
       description = "Organize Imports",
     },
   },
+  on_attach = function(_, bufnr)
+    map("n", "gD", go_to_source_definition, {
+      buffer = bufnr,
+      noremap = true,
+      silent = true,
+      desc = "Goto Source Definition",
+    })
+  end,
 }
 
 lspconfig.gopls.setup {
