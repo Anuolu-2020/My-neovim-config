@@ -129,6 +129,12 @@ end, { desc = "blankline jump to current context" })
 
 -- DAP keymappings
 map("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Add breakpoint at line" })
+map("n", "<leader>do", "<cmd> DapStepOut <CR>", { desc = "Step Out" })
+map("n", "<leader>dO", "<cmd> DapStepOver <CR>", { desc = "Step Over" })
+map("n", "<leader>dp", function()
+  require("dap").pause()
+end, { desc = "Pause" })
+map("n", "<leader>dt", "<cmd> DapTerminate <CR>", { desc = "Terminate" })
 map("n", "<leader>dus", function()
   local widgets = require "dap.ui.widgets"
   local sidebar = widgets.sidebar(widgets.scopes)
@@ -147,6 +153,7 @@ end, { desc = "Debug last go test" })
 -- Gopher keymappings
 map("n", "<leader>gsj", "<cmd> GoTagAdd json <CR>", { desc = "Add json struct tags" })
 map("n", "<leader>gsy", "<cmd> GoTagAdd yaml <CR>", { desc = "Add yaml struct tags" })
+map("n", "<leader>ge", "<cmd> GoIfErr <CR>", { desc = "Add if error boilerplate" })
 
 -- DAP Python keymappings
 map("n", "<leader>dpr", function()
