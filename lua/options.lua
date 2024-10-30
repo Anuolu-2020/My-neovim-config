@@ -68,13 +68,13 @@ vim.env.PATH = table.concat({ vim.fn.stdpath "data", "mason", "bin" }, sep) .. d
 -- DapBreakpoint Ui Icon
 vim.fn.sign_define("DapBreakpoint", {
   text = "🔴", -- nerdfonts icon here
-  texthl = "DapBreakpointSymbol",
+  texthl = "DapBreakpoint",
   linehl = "DapBreakpoint",
   numhl = "DapBreakpoint",
 })
 vim.fn.sign_define("DapStopped", {
-  text = "🔴", -- nerdfonts icon here
-  texthl = "DapStoppedSymbol",
-  linehl = "DapBreakpoint",
-  numhl = "DapBreakpoint",
+  text = "⏹️'",
+  texthl = "DapStopped",
+  linehl = "DapStopped",
+  numhl = "DapStopped",
 })
