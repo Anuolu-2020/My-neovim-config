@@ -128,9 +128,11 @@ map("n", "<leader>cc", function()
 end, { desc = "blankline jump to current context" })
 
 -- DAP keymappings
-map("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { desc = "Add breakpoint at line" })
+map("n", "<leader>db", "<cmd> DapToggleBreakpoint <CR>", { noremap = true, desc = "Add breakpoint at line" })
+--map("n", "<leader>dui", "<cmd>lua require'dapui'.toggle()<CR>", { desc = "Dap Ui Toggle", noremap = true })
 map("n", "<leader>do", "<cmd> DapStepOut <CR>", { desc = "Step Out" })
 map("n", "<leader>dO", "<cmd> DapStepOver <CR>", { desc = "Step Over" })
+map("n", "<leader>dI", "<cmd> DapStepInto <CR>", { desc = "Step Into" })
 map("n", "<leader>dp", function()
   require("dap").pause()
 end, { desc = "Pause" })
@@ -140,7 +142,13 @@ map("n", "<leader>dus", function()
   local sidebar = widgets.sidebar(widgets.scopes)
   sidebar.open()
 end, { desc = "Open debugging sidebar" })
-map("n", "<leader>dr", "<cmd> DapContinue <CR>", { desc = "Start or continue the debugger" })
+map("n", "<leader>dc", "<cmd> DapContinue <CR>", { desc = "Start or continue the debugger" })
+map(
+  "n",
+  "<leader>dr",
+  "<cmd>lua require('dapui').open({reset = true }) <CR>",
+  { desc = "Reset debugger ui", noremap = true }
+)
 
 -- DAP Go keymappings
 map("n", "<leader>dgt", function()
