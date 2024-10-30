@@ -21,7 +21,6 @@ return {
     config = function()
       local dap = require "dap"
       local dapui = require "dapui"
-      require("dapui").setup()
       -- dap.listeners.before.attach.dapui_config = function()
       --   dapui.open()
       -- end
@@ -116,26 +115,34 @@ return {
         opts = {},
       },
     },
-    config = function()
+    opts = function()
       require "configs.js-dap-config"
+      local dapui = require "dapui"
 
-      -- setup dap config by VsCode launch.json file
-      -- local vscode = require "dap.ext.vscode"
-      -- local json = require "plenary.json"
-      -- vscode.json_decode = function(str)
-      --   return vim.json.decode(json.json_strip_comments(str))
-      -- end
+      dapui.setup()
+
+      vim.keymap.set("n", "<leader>dui", require("dapui").toggle)
     end,
   },
   {
-    "dreamsofcode-io/nvim-dap-go",
+    "leo/nvim-dap-go",
     ft = "go",
     dependencies = "mfussenegger/nvim-dap",
-    config = function(_, opts)
-      require("dap-go").setup(opts)
-      --require("lazy").load { plugins = "dap_go" }
+    config = function()
+      require("dapui").setup()
+      require("dap-go").setup()
+      require("nvim-dap-virtual-text").setup()
     end,
   },
+  -- {
+  --   "dreamsofcode-io/nvim-dap-go",
+  --   ft = "go",
+  --   dependencies = "mfussenegger/nvim-dap",
+  --   config = function(_, opts)
+  --     require("dap-go").setup(opts)
+  --     --require("lazy").load { plugins = "dap_go" }
+  --   end,
+  -- },
   {
     "mfussenegger/nvim-dap-python",
     ft = "python",
