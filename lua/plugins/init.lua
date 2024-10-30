@@ -11,11 +11,23 @@ return {
   },
   {
     "rcarriga/nvim-dap-ui",
-    dependencies = "mfussenegger/nvim-dap",
+    {
+      "theHamsta/nvim-dap-virtual-text",
+      opts = {},
+    },
+    event = "VeryLazy",
+    opts = {},
+    dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
     config = function()
       local dap = require "dap"
       local dapui = require "dapui"
-      dapui.setup()
+      require("dapui").setup()
+      -- dap.listeners.before.attach.dapui_config = function()
+      --   dapui.open()
+      -- end
+      -- dap.listeners.before.launch.dapui_config = function()
+      --   dapui.open()
+      -- end
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end
@@ -26,6 +38,10 @@ return {
         dapui.close()
       end
     end,
+  },
+  {
+    "theHamsta/nvim-dap-virtual-text",
+    opts = {},
   },
   {
     "nvimtools/none-ls.nvim",
@@ -68,6 +84,7 @@ return {
         -- Install these linters, formatters, debuggers automatically
         ensure_installed = {
           "java-debug-adapter",
+          "js-debug-adapter",
           "java-test",
         },
       }
@@ -91,6 +108,24 @@ return {
   },
   {
     "mfussenegger/nvim-dap",
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      --"leoluz/nvim-dap-go",
+      {
+        "theHamsta/nvim-dap-virtual-text",
+        opts = {},
+      },
+    },
+    config = function()
+      require "configs.js-dap-config"
+
+      -- setup dap config by VsCode launch.json file
+      -- local vscode = require "dap.ext.vscode"
+      -- local json = require "plenary.json"
+      -- vscode.json_decode = function(str)
+      --   return vim.json.decode(json.json_strip_comments(str))
+      -- end
+    end,
   },
   {
     "dreamsofcode-io/nvim-dap-go",
@@ -132,6 +167,12 @@ return {
     opts = {
       handlers = {},
     },
+    cmd = { "DapInstall", "DapUninstall" },
+    ensure_installed = {
+      -- Update this to ensure that you have the debuggers for the langs you want
+      "delve",
+    },
+    config = function() end,
   },
   {
     "windwp/nvim-ts-autotag",
