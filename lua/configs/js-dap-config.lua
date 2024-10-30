@@ -1,4 +1,5 @@
 local dap = require "dap"
+
 if not dap.adapters["pwa-node"] then
   require("dap").adapters["pwa-node"] = {
     type = "server",
@@ -14,6 +15,7 @@ if not dap.adapters["pwa-node"] then
     },
   }
 end
+
 if not dap.adapters["node"] then
   dap.adapters["node"] = function(cb, config)
     if config.type == "node" then
@@ -28,45 +30,39 @@ if not dap.adapters["node"] then
   end
 end
 
-local js_filetypes = { "typescript", "javascript" }
+local js_filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" }
 
--- local vscode = require "dap.ext.vscode"
--- vscode.type_to_filetypes["node"] = js_filetypes
--- vscode.type_to_filetypes["pwa-node"] = js_filetypes
+local vscode = require "dap.ext.vscode"
+vscode.type_to_filetypes["node"] = js_filetypes
+vscode.type_to_filetypes["pwa-node"] = js_filetypes
 
 for _, language in ipairs(js_filetypes) do
   if not dap.configurations[language] then
     dap.configurations[language] = {
+
       {
+        name = "Launch NestJS (Debug Mode)",
         type = "pwa-node",
         request = "launch",
-        name = "Launch file",
-        program = "${file}",
-        cwd = "${workspaceFolder}",
-        --runtimeExecutable = "node",
+        cwd = vim.fn.getcwd(),
+        runtimeExecutable = "npm", -- Specify npm as the runtime executable
+        args = { "run", "start:debug" }, -- Pass the run command and script name as arguments
+        sourceMaps = true,
+        protocol = "inspector",
+        console = "integratedTerminal",
+        outFiles = { "${workspaceFolder}/dist/**/*.js" },
+        skipFiles = {
+          "${workspaceFolder}/node_modules/**/*.js",
+          "<node_internals>/**",
+        },
       },
-      -- {
-      --   type = "pwa-node",
-      --   request = "attach",
-      --   name = "Attach",
-      --   processId = require("dap.utils").pick_process,
-      --   cwd = "${workspaceFolder}",
-      -- },
-      -- {
-      --   type = "pwa-node",
-      --   request = "launch",
-      --   name = "Launch File(pwa-node with ts-node!!)",
-      --   cwd = vim.fn.getcwd(),
-      --   runtimeExecutable = "ts-node",
-      --   args = { "${file}" },
-      --   sourceMaps = true,
-      --   protocol = "inspector",
-      --   skipFiles = { "<node_internals>/**", "node_modules/**" },
-      --   resolveSourceMapLocations = {
-      --     "${workspaceFolder}/**",
-      --     "!**/node_modules/**",
-      --   },
-      --},
+      {
+        type = "pwa-node",
+        request = "attach",
+        name = "Attach",
+        processId = require("dap.utils").pick_process,
+        cwd = "${workspaceFolder}",
+      },
     }
   end
 end
