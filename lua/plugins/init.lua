@@ -67,6 +67,17 @@ return {
       -- Useful status updates for LSP
       -- https://github.com/j-hui/fidget.nvim
       { "j-hui/fidget.nvim", opts = {} },
+      {
+        "folke/lazydev.nvim",
+        ft = "lua", -- only load on lua files
+        opts = {
+          library = {
+            -- See the configuration section for more details
+            -- Load luvit types when the `vim.uv` word is found
+            { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          },
+        },
+      },
     },
     config = function()
       require "configs.lspconfig"
@@ -77,6 +88,7 @@ return {
           "gradle_ls",
           "jdtls",
         },
+        automatic_installation = true,
       }
 
       require("mason-tool-installer").setup {
@@ -115,7 +127,7 @@ return {
         opts = {},
       },
     },
-    opts = function()
+    config = function()
       require "configs.js-dap-config"
       local dapui = require "dapui"
 
@@ -206,6 +218,8 @@ return {
         "go",
         "javascript",
         "java",
+        "zig",
+        "asm",
       }
     end,
   },
