@@ -10,6 +10,8 @@ local options = {
     clang = { "clang_format" },
     json = { "biome" },
     yaml = { "yamlfmt" },
+    templ = { "templ" },
+    asm = { "asmfmt" },
   },
 
   format_on_save = {
