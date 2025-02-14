@@ -2,7 +2,7 @@
 require("nvchad.configs.lspconfig").defaults()
 
 local lspconfig = require "lspconfig"
-local util = require "lspconfig/util"
+local util = require "lspconfig.util"
 --local nvlsp = require "nvchad.configs.lspconfig"
 
 --Auto save group
@@ -12,21 +12,51 @@ local M = {}
 local map = vim.keymap.set
 
 -- EXAMPLE
-local servers =
-  { "cssls", "ts_ls", "gopls", "pyright", "ruff_lsp", "htmx", "tailwindcss", "zls", "biome", "yamlls", "jdtls" }
+local servers = {
+  "cssls",
+  "ts_ls",
+  "gopls",
+  "pyright",
+  "ruff_lsp",
+  "htmx",
+  "tailwindcss",
+  "zls",
+  "biome",
+  "yamlls",
+  "jdtls",
+  "lua_ls",
+  "templ",
+  "emmet_ls",
+  "asm_lsp",
+}
 
 --"eslint",
 
 -- export on_attach & capabilities
-M.on_attah = function(_, bufnr)
+M.on_attach = function(_, bufnr)
   local function opts(desc)
     return { buffer = bufnr, desc = "LSP " .. desc }
   end
 
-  map("n", "gh", vim.lsp.buf.declaration, opts "Go to declaration")
-  map("n", "gd", require("telescope.builtin").lsp_definitions, opts "Go to definition")
-  map("n", "gI", require("telescope.builtin").lsp_implementations, opts "Go to implementation")
-  map("n", "gr", require("telescope.builtin").lsp_references, opts "Go to references")
+  map("n", "gh", vim.lsp.buf.declaration, { desc = "Go to declaration" })
+  map(
+    "n",
+    "gd",
+    require("telescope.builtin").lsp_definitions,
+    { desc = "Go to definition", noremap = true, silent = true }
+  )
+  map(
+    "n",
+    "gln",
+    require("telescope.builtin").lsp_implementations,
+    { desc = "Go to implementation", noremap = true, silent = true }
+  )
+  map(
+    "n",
+    "glr",
+    require("telescope.builtin").lsp_references,
+    { desc = "Go to references", noremap = true, silent = true }
+  )
   map("n", "K", vim.lsp.buf.hover, opts "Show hover information")
   map("n", "<leader>lh", vim.lsp.buf.signature_help, opts "Show signature help")
   map("n", "<leader>wa", vim.lsp.buf.add_workspace_folder, opts "Add workspace folder")
@@ -162,6 +192,9 @@ lspconfig.ts_ls.setup {
       desc = "Goto Source Definition",
     })
   end,
+  root_dir = function(fname)
+    return util.root_pattern ".git"(fname) or util.root_pattern("package.json", "tsconfig.json", "jsconfig.json")(fname)
+  end,
 }
 
 lspconfig.gopls.setup {
@@ -240,6 +273,10 @@ lspconfig.biome.setup {
   single_file_support = false,
 }
 
+lspconfig.lua_ls.setup {
+  filetypes = { "lua" },
+}
+
 lspconfig.clangd.setup {
   on_attach = function(client, bufnr)
     client.server_capabilities.signatureHelpProvider = false
@@ -249,19 +286,31 @@ lspconfig.clangd.setup {
 }
 
 lspconfig.jdtls.setup {
-  settings = {
-    java = {
-      configuration = {
-        runtimes = {
-          {
-            name = "JavaSE-21",
-            path = "/usr/lib/jvm/jdk-21.0.5-oracle-x64",
-            default = true,
-          },
-        },
-      },
-    },
-  },
+  -- settings = {
+  --   java = {
+  --     configuration = {
+  --       runtimes = {
+  --         {
+  --           name = "JavaSE-21",
+  --           path = "/usr/lib/jvm/jdk-21.0.5-oracle-x64",
+  --           default = true,
+  --         },
+  --       },
+  --     },
+  --   },
+  -- },
+}
+
+lspconfig.templ.setup {
+  filetypes = { "templ" },
+}
+
+lspconfig.emmet_ls.setup {
+  filetypes = { "templ", "html" },
+}
+
+lspconfig.asm_lsp.setup {
+  filetypes = { "asm" },
 }
 
 -- configuring single server, example: typescript
