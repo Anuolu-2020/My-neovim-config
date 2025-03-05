@@ -18,12 +18,12 @@ local function organize_imports()
   vim.lsp.buf.execute_command(params)
 end
 
-local function go_to_source_definition()
-  local params = vim.lsp.util.make_position_params()
-  params.command = "typescript.goToSourceDefinition"
-  params.arguments = { params.textDocument.uri, params.position }
-  params.open = true
-end
+-- local function go_to_source_definition()
+--   local params = vim.lsp.util.make_position_params()
+--   params.command = "typescript.goToSourceDefinition"
+--   params.arguments = { params.textDocument.uri, params.position }
+--   params.open = true
+-- end
 
 local function findAllFileReferences()
   local params = {
@@ -86,12 +86,12 @@ local servers = {
       },
     },
     on_attach = function(_, bufnr)
-      map("n", "gD", go_to_source_definition, {
-        buffer = bufnr,
-        noremap = true,
-        silent = true,
-        desc = "Goto Source Definition",
-      })
+      -- map("n", "gD", go_to_source_definition, {
+      --   buffer = bufnr,
+      --   noremap = true,
+      --   silent = true,
+      --   desc = "Go to Source Definition",
+      -- })
 
       map("n", "gR", findAllFileReferences, {
         buffer = bufnr,
