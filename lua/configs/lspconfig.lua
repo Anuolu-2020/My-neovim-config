@@ -121,7 +121,10 @@ local servers = {
         staticcheck = true,
       },
     },
-    on_attach = function()
+    on_attach = function(client, bufnr)
+      -- Call NVChad's default on_attach to set keymaps, etc.
+      nvlsp.on_attach(client, bufnr)
+
       -- Trigger the organize imports action after the auto-save plugin saves the file
       vim.api.nvim_create_autocmd("User", {
         pattern = "AutoSaveWritePost", -- Hook into the auto-save event
