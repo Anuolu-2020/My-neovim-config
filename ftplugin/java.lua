@@ -5,6 +5,8 @@ local jdtls = require "jdtls"
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
 local workspace_dir = home .. "/jdtls-workspace/" .. project_name
 
+local nvlsp = require "nvchad.configs.lspconfig"
+
 local system_os = ""
 
 -- Determine OS
@@ -158,6 +160,9 @@ local config = {
 
 -- Needed for debugging
 config["on_attach"] = function(client, bufnr)
+  -- Call NVChad's default on_attach to set keymaps, etc.
+  nvlsp.on_attach(client, bufnr)
+
   jdtls.setup_dap { hotcodereplace = "auto" }
   require("jdtls.dap").setup_dap_main_class_configs()
 end
