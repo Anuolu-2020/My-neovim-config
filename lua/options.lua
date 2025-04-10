@@ -3,7 +3,7 @@ require "nvchad.options"
 -- add yours here!
 
 -- local o = vim.o
--- o.cursorlineopt = "both" -- to enable cursorline!
+-- o.cursorlineopt = "both" -- to enable cursorline
 
 -- DapBreakpoint Ui Icon
 vim.fn.sign_define("DapBreakpoint", {
@@ -13,8 +13,8 @@ vim.fn.sign_define("DapBreakpoint", {
   numhl = "DapBreakpoint",
 })
 vim.fn.sign_define("DapStopped", {
-  text = "⏹️'",
-  texthl = "DapStopped",
-  linehl = "DapStopped",
-  numhl = "DapStopped",
+  text = "⏹️",
+  texthl = "DapBreakpoint",
+  linehl = "DapBreakpoint",
+  numhl = "DapBreakpoint",
 })
