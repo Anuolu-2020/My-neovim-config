@@ -10,12 +10,14 @@ local group = vim.api.nvim_create_augroup("autosave", {})
 
 local map = vim.keymap.set
 
-local function organize_imports()
-  local params = {
-    command = "_typescript.organizeImports",
-    arguments = { vim.api.nvim_buf_get_name(0) },
-  }
-  vim.lsp.buf.execute_command(params)
+local function organize_imports(client, bufnr)
+  vim.api.nvim_create_user_command("OrganizeImports", function()
+    client:exec_cmd({
+      title = "Organize Imports",
+      command = "_typescript.organizeImports",
+      arguments = { vim.api.nvim_buf_get_name(bufnr) },
+    }, { bufnr = bufnr })
+  end, {})
 end
 
 -- local function go_to_source_definition()
@@ -25,67 +27,23 @@ end
 --   params.open = true
 -- end
 
-local function findAllFileReferences()
-  local params = {
-    command = "typescript.findAllFileReferences",
-    arguments = { vim.uri_from_bufnr(0) },
-    open = true,
-  }
-  vim.lsp.buf.execute_command(params)
-end
+-- local function findAllFileReferences(client)
+--   client:exec_cmd {
+--     title = "Typescript Find All File References",
+--     command = "_typescript.findAllFileReferences",
+--     arguments = { vim.uri_from_bufnr(0) },
+--     open = true,
+--   }
+-- end
 
 -- EXAMPLE
 local servers = {
   html = {},
   cssls = {},
-  -- vtsls = {
-  --   -- explicitly add default filetypes, so that we can extend
-  --   -- them in related extras
-  --   filetypes = {
-  --     "javascript",
-  --     "javascriptreact",
-  --     "javascript.jsx",
-  --     "typescript",
-  --     "typescriptreact",
-  --     "typescript.tsx",
-  --   },
-  --   settings = {
-  --     complete_function_calls = true,
-  --     vtsls = {
-  --       enableMoveToFileCodeAction = true,
-  --       autoUseWorkspaceTsdk = true,
-  --       experimental = {
-  --         maxInlayHintLength = 30,
-  --         completion = {
-  --           enableServerSideFuzzyMatch = true,
-  --         },
-  --       },
-  --     },
-  --     typescript = {
-  --       updateImportsOnFileMove = { enabled = "always" },
-  --       suggest = {
-  --         completeFunctionCalls = true,
-  --       },
-  --       inlayHints = {
-  --         enumMemberValues = { enabled = true },
-  --         functionLikeReturnTypes = { enabled = true },
-  --         parameterNames = { enabled = "literals" },
-  --         parameterTypes = { enabled = true },
-  --         propertyDeclarationTypes = { enabled = true },
-  --         variableTypes = { enabled = false },
-  --       },
-  --     },
-  --   },
-  -- },
   ts_ls = {
     filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact", "html" },
-    commands = {
-      OrganizeImports = {
-        organize_imports,
-        description = "Organize Typescript Imports",
-      },
-    },
-    on_attach = function(_, bufnr)
+    on_attach = function(client, bufnr)
+      nvlsp.on_attach(client, bufnr)
       -- map("n", "gD", go_to_source_definition, {
       --   buffer = bufnr,
       --   noremap = true,
@@ -93,12 +51,20 @@ local servers = {
       --   desc = "Go to Source Definition",
       -- })
 
-      map("n", "gR", findAllFileReferences, {
-        buffer = bufnr,
-        noremap = true,
-        silent = true,
-        desc = "File References",
-      })
+      organize_imports(client, bufnr)
+
+      -- vim.keymap.set("n", "<leader>oi", function()
+      --   organize_imports(bufnr)
+      -- end, { noremap = true, silent = true, buffer = bufnr })
+
+      -- map("n", "gR", function()
+      --   findAllFileReferences(client)
+      -- end, {
+      --   buffer = bufnr,
+      --   noremap = true,
+      --   silent = true,
+      --   desc = "File References",
+      -- })
 
       -- -- vim.notify("AutoSave presave", vim.log.levels.INFO)
     end,
