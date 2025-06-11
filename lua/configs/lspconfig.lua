@@ -139,6 +139,9 @@ local servers = {
     filetypes = { "css", "tmpl", "html" },
   },
   zls = {
+    on_attach = function(client, bufnr)
+      nvlsp.on_attach(client, bufnr)
+    end,
     filetypes = { "zig" },
   },
   biome = {
