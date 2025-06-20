@@ -279,4 +279,6 @@ return {
     opts = {},
     cmd = { "Typr", "TyprStats" },
   },
+  "nvzone/volt",
+  { "nvzone/timerly", cmd = "TimerlyToggle" },
 }
