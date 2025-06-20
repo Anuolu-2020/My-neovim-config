@@ -245,21 +245,38 @@ return {
       }
     end,
   },
-  --[[{
+  -- {
+  --   "supermaven-inc/supermaven-nvim",
+  --   event = "InsertEnter",
+  --   config = function()
+  --     require("supermaven-nvim").setup {}
+  --   end,
+  -- },
+  {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
     config = function()
       require("copilot").setup {
         suggestion = {
-          enabled = false,
-          auto_trigger = false,
-        },
-        filetypes = {
-          gitcommit = true,
-          markdown = true,
+          enabled = true,
+          auto_trigger = true,
+          keymap = {
+            accept = "<C-y>",
+            accept_word = "<S-y>",
+            accept_line = false,
+            next = "<C-n>",
+            prev = "<C-p>",
+            dismiss = "<C-]>",
+          },
         },
       }
     end,
-  },--]]
+  },
+  {
+    "nvzone/typr",
+    dependencies = "nvzone/volt",
+    opts = {},
+    cmd = { "Typr", "TyprStats" },
+  },
 }
