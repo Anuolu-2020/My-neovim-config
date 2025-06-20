@@ -175,10 +175,13 @@ local servers = {
     end,
     filetypes = { "zig" },
     settings = {
-      zls = {
-        zig_exe_path = "/home/ogunleye/zigup/bin/zig",
-      },
+      -- zls = {
+      --   zig_exe_path = "/home/ogunleye/zigup/bin/zig",
+      -- },
+      warn_style = true,
+      inlay_hints_show_variable_type_hints = true,
     },
+    root_markers = { ".git", "build.zig", "build.zig.lock", "zig-cache" },
   },
   biome = {
     cmd = { "biome-language-server", "--stdio" },
