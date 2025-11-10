@@ -3,6 +3,8 @@ require("nvchad.configs.lspconfig").defaults()
 
 local nvlsp = require "nvchad.configs.lspconfig"
 
+nvlsp.capabilities = vim.lsp.protocol.make_client_capabilities()
+
 --Auto save group
 local group = vim.api.nvim_create_augroup("autosave", {})
 
@@ -231,6 +233,26 @@ local servers = {
   kotlin_language_server = {
     cmd = { "kotlin-language-server", "--stdio" },
     filetypes = { "kotlin", "kt", "kts" },
+  },
+  prismals = {
+    cmd = { "prisma-language-server", "--stdio" },
+    filetypes = { "prisma" },
+    capabilities = {
+      textDocument = {
+        foldingRange = {
+          dynamicRegistration = false,
+          lineFoldingOnly = true,
+        },
+      },
+    },
+    on_attach = function(client, bufnr)
+      nvlsp.on_attach(client, bufnr)
+    end,
+    settings = {
+      prisma = {
+        prismaFmtBinPath = "", -- Ensure prisma-fmt is in your PATH
+      },
+    },
   },
 }
 
