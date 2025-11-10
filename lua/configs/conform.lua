@@ -12,6 +12,7 @@ local options = {
     yaml = { "yamlfmt" },
     templ = { "templ" },
     asm = { "asmfmt" },
+    prisma = { "lsp" },
   },
 
   format_on_save = {
