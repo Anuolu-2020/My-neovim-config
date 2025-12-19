@@ -1,5 +1,44 @@
 return {
   {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup {
+        registries = {
+          "github:mason-org/mason-registry",
+          "github:Crashdummyy/mason-registry",
+        },
+      }
+    end,
+  },
+  {
+    "seblyng/roslyn.nvim",
+    ft = "cs",
+    opts = {
+      config = {
+        on_attach = function(client, bufnr)
+          local nvlsp = require "configs.lspconfig"
+
+          nvlsp.on_attach(client, bufnr)
+          print "Roslyn LSP attached!"
+        end,
+        settings = {
+          ["csharp|inlay_hints"] = {
+            csharp_enable_inlay_hints_for_implicit_object_creation = true,
+            csharp_enable_inlay_hints_for_implicit_variable_types = true,
+            csharp_enable_inlay_hints_for_lambda_parameter_types = true,
+            csharp_enable_inlay_hints_for_types = true,
+          },
+          ["csharp|code_lens"] = {
+            dotnet_enable_references_code_lens = true,
+          },
+          ["csharp|formatting"] = {
+            dotnet_organize_imports_on_format = true,
+          },
+        },
+      },
+    },
+  },
+  {
     "mfussenegger/nvim-jdtls",
     dependencies = { "folke/which-key.nvim" },
     ft = "java",
@@ -295,4 +334,22 @@ return {
     { "<c-s>", mode = { "c" }, function() require("flash").toggle() end, desc = "Toggle Flash Search" },
   },
   },
+  -- {
+  --   "nvim-telescope/telescope-ui-select.nvim",
+  --   dependencies = { "nvim-telescope/telescope.nvim" },
+  --   config = function()
+  --     require("telescope").setup {
+  --       extensions = {
+  --         ["ui-select"] = {
+  --           require("telescope.themes").get_dropdown {
+  --             -- even more opts
+  --           },
+  --         },
+  --       },
+  --     }
+  --     -- To get ui-select loaded and working with telescope, you need to call
+  --     -- load_extension, somewhere after setup function:
+  --     require("telescope").load_extension "ui-select"
+  --   end,
+  -- },
 }
