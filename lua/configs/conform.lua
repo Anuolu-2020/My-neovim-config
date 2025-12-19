@@ -12,7 +12,9 @@ local options = {
     yaml = { "yamlfmt" },
     templ = { "templ" },
     asm = { "asmfmt" },
+    kotlin = { "ktlint" },
     prisma = { "lsp" },
+    xml = { "xmlformatter" },
   },
 
   format_on_save = {
