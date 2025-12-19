@@ -254,6 +254,28 @@ local servers = {
       },
     },
   },
+  -- roslyn = {
+  --   -- cmd = { "roslyn-lsp" },
+  --   filetypes = { "cs" },
+  --   root_dir = require("lspconfig").util.root_pattern("*. sln", "*.csproj", ". git"),
+  --   on_attach = function(client, bufnr)
+  --     nvlsp.on_attach(client, bufnr)
+  --
+  --     print "This will run when the server attaches!"
+  --   end,
+  --   settings = {
+  --     ["csharp|inlay_hints"] = {
+  --       csharp_enable_inlay_hints_for_implicit_object_creation = true,
+  --       csharp_enable_inlay_hints_for_implicit_variable_types = true,
+  --     },
+  --     ["csharp|code_lens"] = {
+  --       dotnet_enable_references_code_lens = true,
+  --     },
+  --     ["csharp|formatting"] = {
+  --       dotnet_organize_imports_on_format = true,
+  --     },
+  --   },
+  -- },
 }
 
 for name, opts in pairs(servers) do
