@@ -11,7 +11,7 @@ map("i", "jk", "<ESC>")
 -- blankline
 map("n", "<leader>cc", function()
   local config = { scope = {} }
-  config.scope.exclude = { language = {}, node_type = {} }
+  config.scope.exclude = { language = {}, node_tpe = {} }
   config.scope.include = { node_type = {} }
   local node = require("ibl.scope").get(vim.api.nvim_get_current_buf(), config)
 
